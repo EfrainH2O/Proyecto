@@ -39,12 +39,13 @@ void SetConnections(vector<Record>& records, Graph<IpAdress>& conexions){
         int j = i+1;
         while(records[i].GetDate()+(25*3600)  > records[j].GetDate() && j < records.size()){
             if(records[i].GetIp().GetPuerto() + 1 > records[j].GetIp().GetPuerto() &&
-                   records[j].GetIp().GetPuerto() > records[i].GetIp().GetPuerto() - 1){
+                   records[j].GetIp().GetPuerto() > records[i].GetIp().GetPuerto() - 1
+                        && records[i].GetMsg() == records[j].GetMsg()){
                     conexions.addAdyacency(records[j].GetIp(), records[i].GetIp());
                    }
             j++;
         }
-        cout<<i<<endl;
+        //cout<<i<<endl;
     }
     return;
 }
@@ -53,11 +54,10 @@ void readData(string filename, vector<Record>& Records, Graph<IpAdress> &Conect)
     ifstream s;
     Record r;
     s.open(filename);
-    int i = 0;
-    Node<IpAdress> *temp = nullptr;
-    while(!s.eof()){
+
+    while(!s.eof() && s.is_open()){
         s>>r;
-        temp = Conect.addNode(r.GetIp(), temp);
+        //temp = Conect.addNode(r.GetIp(), temp);
         Records.push_back(r);
     }
     s.close();

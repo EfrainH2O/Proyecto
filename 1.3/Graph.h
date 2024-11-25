@@ -14,6 +14,7 @@ class Graph {
     ~Graph();
     bool isDirected();
     Node<T> * addNode(T, Node<T>*);
+    Node<T>* addNode(T);
     void addAdyacency(T,T);
     void delNode(T);
     void delAdyacency(T,T);
@@ -53,9 +54,33 @@ Node<T> * Graph<T>::addNode(T tag, Node<T> * q) {
 }
 
 template <class T>
+Node<T>* Graph<T>::addNode(T tag) {
+    Node<T> *p = findNode(tag);
+    if (p == nullptr) {
+        p = new Node<T>(tag);
+        Node<T> *q = first;
+        if (q == nullptr) {
+            first = p;
+        }
+        else {
+            while (q->getNext() != nullptr) {
+                q = q->getNext();
+            }
+            q->setNext(p);
+        }
+    }
+    return p;
+}
+
+
+
+template <class T>
 void Graph<T>::addAdyacency(T tag1,T tag2){
     Node<T> *a = findNode(tag1);
     Node<T> *b = findNode(tag2);
+    a = nullptr == a ? addNode(tag1) : a;
+    b = nullptr == b ? addNode(tag2) : b;
+    
     if (a != nullptr && b != nullptr) {
         a->setAdyacency(b);
         if (!directed) {

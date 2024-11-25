@@ -16,6 +16,7 @@ class Record {
     Record(string,int,string,string,string);
     Date GetDate();
     IpAdress GetIp();
+    int GetMsg();
     friend ifstream& operator>>(ifstream&,Record &);
     bool operator>(const Record&);
     bool operator==(Record&);

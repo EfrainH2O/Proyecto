@@ -35,6 +35,10 @@ IpAdress Record::GetIp(){
     return ip;
 }
 
+int Record::GetMsg(){
+    return msgType;
+}
+
 ifstream& operator>>(ifstream& file,  Record&r){
     file>>r.d>>r.ip;  
     getline(file,r.message);
