@@ -57,7 +57,7 @@ void Node<T>::increaseCount(){
 }
 
 template <class T>
-int getCount(){
+int Node<T>::getCount(){
     return count;
 }
 

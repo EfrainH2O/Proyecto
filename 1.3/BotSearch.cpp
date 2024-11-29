@@ -20,7 +20,7 @@ int asciiMod(int max, IpAdress key ){
     for(int i = 0; i < key.GetIp().size(); i++){
         sum += key.GetIp()[i]%max;
     }
-    return sum;
+    return sum%max;
 }
 
 int main(int argc, char *argv[]){
@@ -37,7 +37,7 @@ int main(int argc, char *argv[]){
     SetConnections(records, conexions);
     Hash_Collisions<IpAdress, Node<IpAdress>*> tabla(records.size(), asciiMod);
     //conexions.depthFirst();
-    Node<IpAdress> * q = conexions.getFisrt();
+    Node<IpAdress> * q = conexions.getFirst();
     while(q  != nullptr){
         tabla.add(q->getTag(), q);
         q = q->getNext();

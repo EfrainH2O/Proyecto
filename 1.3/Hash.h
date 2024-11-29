@@ -1,17 +1,18 @@
 #pragma once
+template <class T, class U>
+class cell {
+      public:
+        T key;
+        U value;
+        bool isEmpty = true;
+        cell* next = nullptr;
+    };
 
 
 template <class T, class U>
 class Hash_Collisions {
   private:
-    class cell {
-      public:
-        T key;
-        U value;
-        bool isEmpty = true;
-        cell<T,U>* next = nullptr;
-    };
-    cell<T,U> *p;
+    cell <T,U>*p;
     int max_size;
     int collision_size; // 14 to 21 % of max_size
     int (*hash_function)(int,T);
@@ -21,6 +22,7 @@ class Hash_Collisions {
     void add(T,U);
     void del(T,U);
     bool isIn(T);
+    U findValue(T);
 };
 
 
@@ -40,9 +42,10 @@ Hash_Collisions<T,U>::~Hash_Collisions() {
 template <class T, class U>
 void Hash_Collisions<T,U>::add(T key,U value) {
     if (isIn(key)) {
+        cout<<"CantInsert: Alrady in data"<<endl;
         return;
     }
-    int base_idx = hash_function(key);
+    int base_idx = hash_function(max_size, key);
     if (p[base_idx].isEmpty) {
         p[base_idx].isEmpty = false;
         p[base_idx].key = key;
@@ -59,9 +62,10 @@ void Hash_Collisions<T,U>::add(T key,U value) {
                 r->key = key;
                 r->value = value;
                 q->next = r;
-                break;
+                return;
             }
         }
+        cout<<"Cantinsert: Not Space"<<endl;
     }
 }
 
@@ -72,7 +76,7 @@ void Hash_Collisions<T,U>::del(T key, U value) {
 
 template <class T, class U>
 bool Hash_Collisions<T,U>::isIn(T key) {
-    int base_idx = hash_function(key);
+    int base_idx = hash_function(max_size, key);
     if (!p[base_idx].isEmpty) {
         cell<T,U> *q = p + base_idx;
         while (q != nullptr) {
@@ -83,4 +87,21 @@ bool Hash_Collisions<T,U>::isIn(T key) {
         }
     }
     return false;
+}
+
+template <class T, class U>
+U Hash_Collisions<T,U>:: findValue(T key){
+    int base_idx = hash_function(max_size, key);
+    if (!p[base_idx].isEmpty) {
+        cell<T,U> *q = p + base_idx;
+        while (q != nullptr) {
+            if (q->key == key) {
+                return q->value;
+            }
+            q = q->next;
+        }
+    }
+
+    U temp;
+    return temp ;
 }
