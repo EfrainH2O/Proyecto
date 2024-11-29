@@ -22,7 +22,14 @@ class Graph {
     bool isAdyacency(T,T);
     void breadthFirst();
     void depthFirst();
+    Node<T>* getFisrt();
 };
+
+template <class T>
+Node<T> Graph<T>::* getFirst(){
+    return first;
+}
+
 
 template <class T>
 Graph<T>::Graph(bool d){

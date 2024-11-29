@@ -5,6 +5,7 @@
 #include <vector>
 #include "Graph.h"
 #include "AVL.h"
+#include "Hash.h"
 using namespace std;
 void SetConnections(vector<Record>& , Graph<IpAdress>& );
 void EmptyUp(vector<Record>& data, AVL<Record>& organized);
@@ -13,6 +14,14 @@ void writeData(string, vector<Record> &);
 void MergeSort(vector<Record> &info, int low, int high);
 Date askDate();
 void findDatabyIP(IpAdress,IpAdress,vector<Record>&,vector<Record>&);
+
+int asciiMod(int max, IpAdress key ){
+    int sum;
+    for(int i = 0; i < key.GetIp().size(); i++){
+        sum += key.GetIp()[i]%max;
+    }
+    return sum;
+}
 
 int main(int argc, char *argv[]){
     string l;
@@ -26,7 +35,13 @@ int main(int argc, char *argv[]){
     cout<<"#List of Records: "<<records.size()<<endl;
     MergeSort(records, 0, records.size()-1);
     SetConnections(records, conexions);
-    conexions.depthFirst();
+    Hash_Collisions<IpAdress, Node<IpAdress>*> tabla(records.size(), asciiMod);
+    //conexions.depthFirst();
+    Node<IpAdress> * q = conexions.getFisrt();
+    while(q  != nullptr){
+        tabla.add(q->getTag(), q);
+        q = q->getNext();
+    }
   //  EmptyUp(Searchvector, ReORG);
     
 
