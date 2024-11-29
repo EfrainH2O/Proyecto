@@ -4,16 +4,11 @@
 //#include "DoubleLinkedvector.cpp"
 #include <vector>
 #include "Graph.h"
-#include "AVL.h"
 #include "Hash.h"
 using namespace std;
 void SetConnections(vector<Record>& , Graph<IpAdress>& );
-void EmptyUp(vector<Record>& data, AVL<Record>& organized);
 void readData(string , vector<Record> &, Graph<IpAdress> &);
-void writeData(string, vector<Record> &);
 void MergeSort(vector<Record> &info, int low, int high);
-Date askDate();
-void findDatabyIP(IpAdress,IpAdress,vector<Record>&,vector<Record>&);
 
 int asciiMod(int max, IpAdress key ){
     int sum;
@@ -63,10 +58,6 @@ int main(int argc, char *argv[]){
         cout<<"\nIp no dentro del grafo"<<endl;
     }
 
-    
-
-  //  EmptyUp(Searchvector, ReORG);
-    
 
 }
 
@@ -101,19 +92,6 @@ void readData(string filename, vector<Record>& Records, Graph<IpAdress> &Conect)
 }
 
 
-void writeData(string filename, vector<Record> &Data){
-    ofstream s(filename);
-    int limit = Data.size();
-    if(s.is_open()){
-        for(int i = 0; i < limit; i++ ){
-            s<<Data[i];
-        }
-    }
-    else{
-        cout<<"Error Writing"<<endl;
-        return;
-    }
-}
 
 void MergeSort(vector<Record> &info, int low, int high){
     if(low >= high){
@@ -155,80 +133,4 @@ void MergeSort(vector<Record> &info, int low, int high){
     delete[] aux;
     return;
     // nlog(n)
-}
-
-Date askDate(){
-    vector<string> v;
-    string info;
-    string dataFragment;
-    cout<<"Ingrese Datos: "<<endl;
-    getline(cin,info);
-    stringstream data(info);
-    while(data>>dataFragment){
-        v.push_back(dataFragment);
-    }
-    Date temp(v[0],stoi(v[1]), v[2]);
-    return temp;
-}
-
-void findData(Date start,Date end,vector<Record>& data,vector<Record>&result){
-    int size = data.size();
-
-    for(int i = 0; i < size; i++){
-        if(data[i].GetDate() > start && data[i].GetDate() < end){
-            result.push_back(data[i]);
-        }
-        if(data[i].GetDate() >end){
-            return;
-        }
-        //O(n)
-    }
-
-}
-
-void findDatabyIP(IpAdress start,IpAdress end,vector<Record>& data,vector<Record>&result){
-    int size = data.size();
-    for(int i = 0; i < size; i++){
-        if(data[i].GetIp() > start && data[i].GetIp() < end){
-            result.push_back(data[i]);
-        }
-        if(data[i].GetIp() >end){
-            return;
-        }
-        //O(n)
-    }
-
-}
-
-void EmptyUp(vector<Record>& data, AVL<Record>& organized){
-    //Con maps o hashmaps seria mas sencillo
-    Record empty;
-    vector<Record> Max (5,empty);
-    vector<int> Number(5,0);
-    int amount = 1;
-    for(int i = 0; i < data.size(); i++){
-        //cout<<i<<data[i]<<endl;
-        if(data[i] == data[i+1]){
-            amount++;
-            continue;
-        }
-        organized.add(data[i]); //
-        auto it = Max.begin();
-        for(auto j = Number.begin(); j != Number.end(); j++){
-            
-            if(*j < amount){
-                Number.insert(j,amount);
-                Number.pop_back();
-                Max.insert(it,data[i]);
-                Max.pop_back();
-                break;
-            }
-            it++;
-        }
-        amount = 1;
-    }
-    cout<<"Mas Repetidos"<<endl;
-    for(int i = 0; i < 5; i ++){
-        cout<< i+1<<": "<<Max[i]<<" Cantidad: "<<Number[i]<<endl;
-    }
 }
