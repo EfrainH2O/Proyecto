@@ -45,7 +45,6 @@ void SetConnections(vector<Record>& records, Graph<IpAdress>& conexions){
                    }
             j++;
         }
-        //cout<<i<<endl;
     }
     return;
 }

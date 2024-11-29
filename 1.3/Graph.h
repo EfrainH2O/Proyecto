@@ -79,6 +79,12 @@ void Graph<T>::addAdyacency(T tag1,T tag2){
     Node<T> *a = findNode(tag1);
     Node<T> *b = findNode(tag2);
     a = nullptr == a ? addNode(tag1) : a;
+    if(tag1 == tag2 ){
+        a->increaseCount();
+        return ;
+
+    }
+    
     b = nullptr == b ? addNode(tag2) : b;
     
     if (a != nullptr && b != nullptr) {
