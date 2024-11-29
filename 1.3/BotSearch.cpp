@@ -17,8 +17,10 @@ void findDatabyIP(IpAdress,IpAdress,vector<Record>&,vector<Record>&);
 
 int asciiMod(int max, IpAdress key ){
     int sum;
-    for(int i = 0; i < key.GetIp().size(); i++){
-        sum += key.GetIp()[i]%max;
+    for(int i = 0; i < key.GetIp().size() && key.GetIp()[i] != ':'; i++){
+        if(key.GetIp()[i]!= '.'){
+            sum += key.GetIp()[i]*(10^i);
+        }
     }
     return sum%max;
 }
@@ -38,10 +40,31 @@ int main(int argc, char *argv[]){
     Hash_Collisions<IpAdress, Node<IpAdress>*> tabla(records.size(), asciiMod);
     //conexions.depthFirst();
     Node<IpAdress> * q = conexions.getFirst();
+    Node<IpAdress> *max = q;
     while(q  != nullptr){
-        tabla.add(q->getTag(), q);
+        int iter;
+        max = max->getAdy() < q->getAdy() ? q: max;
+        iter = tabla.add(q->getTag(), q);
+        cout<<"Colisiones al insertar: "<< iter<< " Ip: "<< q->getTag()<<" Adyacencias: "<<q->getAdy()<<endl;
         q = q->getNext();
+        
+
     }
+    cout<<"Ip con mas adyacencias: "<< max->getTag() <<endl;
+    cout<<"Ingrese su Ip a inspeccionar: ";
+    IpAdress temp;
+    cin>>temp;
+    if(tabla.isIn(temp)){
+        q = tabla.findValue(temp);
+        cout<<"\nCantidad de veces repetida: "<<q->getCount()
+        <<"\nTotal de Adyacencias: "<< q->getAdy()<<endl;
+        q->getAdyacencies();
+    }else{
+        cout<<"\nIp no dentro del grafo"<<endl;
+    }
+
+    
+
   //  EmptyUp(Searchvector, ReORG);
     
 
@@ -54,8 +77,7 @@ void SetConnections(vector<Record>& records, Graph<IpAdress>& conexions){
         int j = i+1;
         while(records[i].GetDate()+(25*3600)  > records[j].GetDate() && j < records.size()){
             if(records[i].GetIp().GetPuerto() + 1 > records[j].GetIp().GetPuerto() &&
-                   records[j].GetIp().GetPuerto() > records[i].GetIp().GetPuerto() - 1
-                        && records[i].GetMsg() == records[j].GetMsg()){
+                   records[j].GetIp().GetPuerto() > records[i].GetIp().GetPuerto() - 1){
                     conexions.addAdyacency(records[j].GetIp(), records[i].GetIp());
                    }
             j++;

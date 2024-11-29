@@ -12,6 +12,7 @@ class Node {
   private:
     T tag;
     int count;
+    int Ady;
     Node<T>* next;
     Adjacency<T>* first;
   public:
@@ -27,6 +28,7 @@ class Node {
     bool isAdyacency(Node<T>*);
     int getCount();
     int getAdyacencies();
+    int getAdy();
 };
 
 template <class T>
@@ -34,7 +36,8 @@ Node<T>::Node(T t) {
     tag = t;
     next = nullptr;
     first = nullptr;
-    count = 0 ;
+    count = 1 ;
+    Ady = 0;
 }
 
 template <class T>
@@ -51,6 +54,11 @@ template <class T>
 T Node<T>::getTag() {
     return tag;
 }
+
+template <class T>
+int Node<T>::getAdy(){
+    return Ady;
+}
 template <class T>
 void Node<T>::increaseCount(){
     count++;
@@ -63,10 +71,10 @@ int Node<T>::getCount(){
 
 template <class T>
 int Node<T>::getAdyacencies(){
-    Adjacency<T>* p = first();
+    Adjacency<T>* p = first;
     int i = 0;
     while(p != nullptr){
-        cout<<p<<' ';
+        cout<<p->getTag()<<' ';
         p = p->getNext();
         i++;
     } 
@@ -87,6 +95,7 @@ void Node<T>::setNext(Node<T>* n) {
 
 template <class T>
 void Node<T>::setAdyacency(Node<T>* b) {
+    Ady++;
     Adjacency<T> *c = new Adjacency<T>(b->getTag());
     c->setNext(first);
     first = c;
@@ -94,6 +103,7 @@ void Node<T>::setAdyacency(Node<T>* b) {
 
 template <class T>
 void Node<T>::delAdyacency(Node<T>* b){
+    Ady--;
     Adjacency<T> *p = first, *q = nullptr;
     while (p != nullptr) {
         if (p->getTag() == b->getTag())

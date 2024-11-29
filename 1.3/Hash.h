@@ -19,7 +19,7 @@ class Hash_Collisions {
   public:
     Hash_Collisions(int,int (*)(int,T));
     ~Hash_Collisions();
-    void add(T,U);
+    int add(T,U);
     void del(T,U);
     bool isIn(T);
     U findValue(T);
@@ -40,32 +40,37 @@ Hash_Collisions<T,U>::~Hash_Collisions() {
 }
 
 template <class T, class U>
-void Hash_Collisions<T,U>::add(T key,U value) {
+int Hash_Collisions<T,U>::add(T key,U value) {
     if (isIn(key)) {
         cout<<"CantInsert: Alrady in data"<<endl;
-        return;
+        return -1;
     }
     int base_idx = hash_function(max_size, key);
     if (p[base_idx].isEmpty) {
         p[base_idx].isEmpty = false;
         p[base_idx].key = key;
         p[base_idx].value = value;
+        return 1;
     }
     else {
+           int iter = 0;
         cell<T,U> *q = p + base_idx;
         while (q->next != nullptr) {
             q = q->next;
+            iter++;
         }
         for (cell<T,U> *r = p + max_size + 1; r != p + max_size + collision_size + 1; r++) {
+            
             if (r->isEmpty) {
                 r->isEmpty = false;
                 r->key = key;
                 r->value = value;
                 q->next = r;
-                return;
+                return iter;
             }
         }
         cout<<"Cantinsert: Not Space"<<endl;
+        return -1;
     }
 }
 
@@ -92,6 +97,7 @@ bool Hash_Collisions<T,U>::isIn(T key) {
 template <class T, class U>
 U Hash_Collisions<T,U>:: findValue(T key){
     int base_idx = hash_function(max_size, key);
+    
     if (!p[base_idx].isEmpty) {
         cell<T,U> *q = p + base_idx;
         while (q != nullptr) {
@@ -102,6 +108,4 @@ U Hash_Collisions<T,U>:: findValue(T key){
         }
     }
 
-    U temp;
-    return temp ;
 }
